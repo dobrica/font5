@@ -1,0 +1,249 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:font5="clr-namespace:Font5"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <Color x:Key="PrimaryColor">#673ab7</Color>
+    <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
+    <font5:BoolToVisibiltyConverter x:Key="BoolToVisibiltyConverter" />
+    <font5:EnableClearSelectionBoolConverter x:Key="EnableClearSelectionBoolConverter" />
+    <font5:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+
+    <ControlTemplate x:Key="SearchTextBox" TargetType="{x:Type TextBox}">
+        <Border
+            Name="SearchTextBoxBorder"
+            Canvas.Left="10"
+            Canvas.Top="10"
+            Width="270"
+            Height="44"
+            BorderBrush="{DynamicResource MaterialDesignTextAreaBorder}"
+            BorderThickness="1"
+            CornerRadius="5"
+            IsEnabled="{Binding DataContext.IsTextViewVisible, ElementName=window, Converter={StaticResource InverseBooleanConverter}}"
+            ToolTip="Search fonts collection"
+            ToolTipService.ShowOnDisabled="True">
+            <DockPanel Height="36" Margin="-1,0,0,0">
+                <Button Style="{DynamicResource MaterialDesignToolButton}">
+                    <materialDesign:PackIcon Kind="Magnify" />
+                </Button>
+                <TextBox
+                    Name="SearchTextBox"
+                    MinWidth="230"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    materialDesign:HintAssist.Hint="Search"
+                    materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                    BorderThickness="0"
+                    Text="{Binding DataContext.SearchCriteria, ElementName=window, Delay=750, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </DockPanel>
+        </Border>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=IsMouseOver, ElementName=SearchTextBox}" Value="True">
+                <Setter Property="Width" Value="270" />
+                <Setter Property="Height" Value="44" />
+                <Setter TargetName="SearchTextBoxBorder" Property="BorderThickness" Value="2" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsFocused, ElementName=SearchTextBox}" Value="True">
+                <Setter TargetName="SearchTextBoxBorder" Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
+                <Setter Property="Width" Value="270" />
+                <Setter Property="Height" Value="44" />
+                <Setter TargetName="SearchTextBoxBorder" Property="BorderThickness" Value="2" />
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style
+        x:Key="ToggleButtonStyle"
+        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+        TargetType="{x:Type ToggleButton}">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Width" Value="28" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+                <Setter Property="Background" Value="White" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="RaisedButtonStyle"
+        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Width" Value="28" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+                <Setter Property="Background" Value="White" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ColorPickerButton" TargetType="ToggleButton">
+        <Setter Property="Width" Value="28" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate xmlns:chrome="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=Xceed.Wpf.Toolkit" TargetType="ToggleButton">
+
+                    <Border
+                        Background="LightGray"
+                        BorderBrush="Gray"
+                        BorderThickness="1">
+                        <ContentPresenter
+                            Height="26"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="RowsColumnsStyle"
+        BasedOn="{StaticResource MaterialDesignComboBox}"
+        TargetType="ComboBox">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=IsChecked, ElementName=CustomRowsColumns}" Value="True">
+                <Setter Property="IsEnabled" Value="True" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding DataContext.IsTextViewVisible, ElementName=window}" Value="True">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsChecked, ElementName=CustomRowsColumns}" Value="False">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate x:Key="SelectedTemplate">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                FontFamily="{Binding}"
+                FontSize="{Binding DataContext.FontSize, ElementName=window}"
+                FontStyle="{Binding DataContext.IsFontItalic, ElementName=window}"
+                FontWeight="{Binding Path=SelectedValue, ElementName=Weights}"
+                Foreground="{StaticResource PrimaryColorBrush}"
+                Text="{Binding DataContext.CustomText, ElementName=window}"
+                TextAlignment="Center"
+                TextDecorations="{Binding DataContext.TextDecorations, ElementName=window}" />
+
+            <TextBlock
+                Grid.Row="1"
+                FontSize="{Binding DataContext.SmallFontSize, ElementName=window}"
+                FontStyle="Normal"
+                Foreground="{StaticResource PrimaryColorBrush}"
+                Text="{Binding}"
+                TextAlignment="Center"
+                TextWrapping="Wrap"
+                Visibility="{Binding IsChecked, ElementName=CbFontNamesOn, Converter={StaticResource BoolToVisibiltyConverter}}" />
+
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ItemTemplate">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                FontFamily="{Binding}"
+                FontSize="{Binding DataContext.FontSize, ElementName=window}"
+                FontStyle="{Binding DataContext.IsFontItalic, ElementName=window}"
+                FontWeight="{Binding Path=SelectedValue, ElementName=Weights}"
+                Foreground="{Binding DataContext.Foreground, ElementName=window}"
+                Text="{Binding DataContext.CustomText, ElementName=window}"
+                TextAlignment="Center"
+                TextDecorations="{Binding DataContext.TextDecorations, ElementName=window}" />
+
+            <TextBlock
+                Grid.Row="1"
+                FontSize="{Binding DataContext.SmallFontSize, ElementName=window}"
+                FontStyle="Normal"
+                Foreground="{Binding DataContext.Foreground, ElementName=window}"
+                Text="{Binding}"
+                TextAlignment="Right"
+                TextWrapping="Wrap"
+                Visibility="{Binding IsChecked, ElementName=CbFontNamesOn, Converter={StaticResource BoolToVisibiltyConverter}}" />
+        </Grid>
+    </DataTemplate>
+
+    <ControlTemplate
+        x:Key="ListBoxItemTemplate"
+        x:Name="ListBoxItemTemplate"
+        TargetType="ListBoxItem">
+        <Grid Background="{Binding DataContext.Background, ElementName=window}">
+            <CheckBox
+                x:Name="CbSelection"
+                Margin="5,0,0,5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                materialDesign:CheckBoxAssist.CheckBoxSize="25"
+                IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                Style="{StaticResource MaterialDesignDarkCheckBox}"
+                Visibility="Collapsed" />
+            <Border BorderBrush="{StaticResource PrimaryColorBrush}" BorderThickness="0.1">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="CbSelection" Property="Visibility" Value="Visible" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="CbSelection" Property="Visibility" Value="Collapsed" />
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="ContainerStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Template" Value="{StaticResource ListBoxItemTemplate}" />
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="Background" Value="{Binding DataContext.Background, ElementName=window}" />
+        <Setter Property="BorderThickness" Value="0.1" />
+        <Setter Property="ContentTemplate" Value="{StaticResource ItemTemplate}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="ContentTemplate" Value="{StaticResource SelectedTemplate}" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
